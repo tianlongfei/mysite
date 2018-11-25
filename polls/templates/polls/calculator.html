@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>金融计算器专业版</title>
+	
+	<style type="text/css">
+		body {
+			margin: 0px;
+			padding: 0px;
+		}
+
+		#screen {
+			width: 400px;
+			height: 40px;
+			border: 1px solid #aaa;
+			text-align: right;
+			font-size: 30px;
+			color: #666;
+		}
+
+		.row {
+			margin: 0px;
+			padding: 10px;
+			/*border: 1px solid red;*/
+		}
+
+		.row button {
+			margin-left: 20px;
+			width: 50px;
+			height: 50px;
+		}
+	</style>
+
+	{% load static %}	
+	<script src="{% static 'polls/calculator.js' %}"></script>
+
+</head>
+<body>
+<div class="row" >
+	<p id="screen"></p>
+</div>
+<div class="row">
+	<button type="button" id="7" onclick="cal.enter_number(this)">7</button>
+	<button type="button" id="8" onclick="cal.enter_number(this)">8</button>
+	<button type="button" id="9" onclick="cal.enter_number(this)">9</button>
+</div>
+<div class="row">
+	<button type="button" id="4" onclick="cal.enter_number(this)">4</button>
+	<button type="button" id="5" onclick="cal.enter_number(this)">5</button>
+	<button type="button" id="6" onclick="cal.enter_number(this)">6</button>
+</div>
+<div class="row">
+	<button type="button" id="1" onclick="cal.enter_number(this)">1</button>
+	<button type="button" id="2" onclick="cal.enter_number(this)">2</button>
+	<button type="button" id="3" onclick="cal.enter_number(this)">3</button>
+</div>
+<div class="row">
+	<button type="button" id="0" onclick="cal.enter_number(this)">0</button>
+	<button type="button" id="point" onclick="cal.enter_number(this)">·</button>
+	<button type="button" id="pm" onclick="cal.enter_number(this)">+|-</button>
+</div>
+<div class="row">
+	<button type="button" onclick="">+</button>
+	<button type="button" onclick="">-</button>
+	<button type="button" onclick="">×</button>
+	<button type="button" onclick="">÷</button>
+	<button type="button" onclick="">=</button>
+</div>
+
+<p id="test"></p>
+
+</body>
+</html>

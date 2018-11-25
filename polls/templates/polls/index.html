@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>theMarket</title>
+<style type="text/css">
+body {
+  margin: 0;
+}
+
+.topnav {
+    background-color: #333;
+    /*overflow: hidden; */
+    height: 60px;
+    /*border: 1px solid red;*/
+
+}
+
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    height: 60px;
+    padding: 10px 16px;
+    text-decoration: none;
+}
+
+</style>
+</head>
+
+<body>
+<div class="topnav">
+	<a href="#">市场</a>
+	<a href="#">自选</a>
+	<a href="#">Note</a>
+</div>
+
+<div>
+	<h2>股票列表</h2>
+
+	{% if security_dict %}
+	{% for security_id, security_name in security_dict.items %}
+	<a href={{ security_id }}>{{ security_name }}({{ security_id }})</a><br>
+	{% endfor %}
+	{% endif %}
+
+	<p>todo list: </p>
+	<ul>
+		<li>布局</li>
+		<li>距离调整:margin, padding，在不同分辨率电脑上的显示</li>
+	</ul>
+</div>
+
+
+</body>
+</html>
+
+
