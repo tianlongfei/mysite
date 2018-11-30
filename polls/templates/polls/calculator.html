@@ -4,18 +4,81 @@
 	<title>金融计算器专业版</title>
 	
 	<style type="text/css">
-		body {
+		* {
 			margin: 0px;
 			padding: 0px;
 		}
 
-		#screen {
-			width: 400px;
-			height: 40px;
+		.overall {
+			width: 400px; 
+			/*background-color: lightblue; */
+			margin: 0px;
+		}
+
+		.a0 {
+			padding: 10px;
+			background-color: lightblue;
+		}
+
+		.displayer {
 			border: 1px solid #aaa;
+		}
+
+		.top_bar {
+			padding-left: 5px;
+			padding-right: 10px;
+
+		}
+
+		.a0 p {
+			margin: 0 auto;
+			width: 100%;
+			height: 50px;
+			/*border: 1px solid #aaa;*/
 			text-align: right;
-			font-size: 30px;
+			font-size: 40px;
 			color: #666;
+		}
+
+		.a1 {
+			background-color: orange;
+		}
+
+		.a2 {
+			overflow: hidden; 
+			background-color: #666;
+		}
+
+		.a3 {
+			float: left;
+			/*width: 50%;*/
+			background-color: red;
+		}
+
+		.a4 {
+			float: left;
+			/*width: 5%;*/
+			background-color: blue;
+		}
+
+		.a5 {
+			/*background-color: #ccc;*/
+		}
+
+		.a6 {
+			background-color: #ccc;
+			float: left;
+		}
+
+		.a7 {
+			background-color: #aaa;
+			float: left;
+		}
+
+		.top_bar span {
+			font-size: 10px;
+			/*display: none;*/
+			visibility: hidden;
 		}
 
 		.row {
@@ -24,10 +87,23 @@
 			/*border: 1px solid red;*/
 		}
 
+		.column {
+			margin: 0px;
+			/*padding: 10px;*/
+		}
+
 		.row button {
 			margin-left: 20px;
-			width: 50px;
-			height: 50px;
+			width: 40px;
+			height: 40px;
+		}
+
+		.column button {
+			display: block;
+			margin: 20px;
+			width: 40px;
+			height: 40px;
+
 		}
 	</style>
 
@@ -36,38 +112,126 @@
 
 </head>
 <body>
-<div class="row" >
-	<p id="screen"></p>
-</div>
-<div class="row">
-	<button type="button" id="7" onclick="cal.enter_number(this)">7</button>
-	<button type="button" id="8" onclick="cal.enter_number(this)">8</button>
-	<button type="button" id="9" onclick="cal.enter_number(this)">9</button>
-</div>
-<div class="row">
-	<button type="button" id="4" onclick="cal.enter_number(this)">4</button>
-	<button type="button" id="5" onclick="cal.enter_number(this)">5</button>
-	<button type="button" id="6" onclick="cal.enter_number(this)">6</button>
-</div>
-<div class="row">
-	<button type="button" id="1" onclick="cal.enter_number(this)">1</button>
-	<button type="button" id="2" onclick="cal.enter_number(this)">2</button>
-	<button type="button" id="3" onclick="cal.enter_number(this)">3</button>
-</div>
-<div class="row">
-	<button type="button" id="0" onclick="cal.enter_number(this)">0</button>
-	<button type="button" id="point" onclick="cal.enter_number(this)">·</button>
-	<button type="button" id="pm" onclick="cal.enter_number(this)">+|-</button>
-</div>
-<div class="row">
-	<button type="button" onclick="">+</button>
-	<button type="button" onclick="">-</button>
-	<button type="button" onclick="">×</button>
-	<button type="button" onclick="">÷</button>
-	<button type="button" onclick="">=</button>
+<div class="overall">	
+	<div class="a0" >
+		<div class="displayer">
+			<div class="top_bar">
+				<span id="top_bar_2nd">2nd</span>
+				<span id="top_bar_inv">INV</span>
+				<span id="top_bar_hyp">HYP</span>
+				<span id="top_bar_compute">COMPUTE</span>
+				<span id="top_bar_enter">ENTER</span>
+				<span id="top_bar_set">SET</span>
+				<span id="top_bar_updown">↑↓</span>
+				<span id="top_bar_del">DEL</span>
+				<span id="top_bar_ins">INS</span>
+				<span id="top_bar_bgn">BGN</span>
+				<span id="top_bar_rad">RAD</span>
+				<span id="top_bar_assignment">◁</span>
+				<span id="top_bar_type">*</span>
+			</div>
+			<p id="screen"></p>			
+		</div>
+	</div>
+
+	<div class="a1">
+		<div class='row'>
+			<button type="button" id="cpt" onclick="">CPT</button>
+			<button type="button" id="enter" onclick="">ENTER</button>
+			<button type="button" id="up" onclick="">↑</button>	
+			<button type="button" id="down" onclick="">↓</button>	
+			<button type="button" id="onoff" onclick="">ON|OFF</button>	
+		</div>
+
+		<div class='row'>
+			<button type="button" id="2nd" onclick="cal.enter_key(this)">2ND</button>
+			<button type="button" id="cf" onclick="">CF</button>
+			<button type="button" id="npv" onclick="">NPV</button>	
+			<button type="button" id="irr" onclick="">IRR</button>	
+			<button type="button" id="back" onclick="">→</button>	
+		</div>
+
+		<div class='row'>
+			<button type="button" id="n" onclick="">N</button>
+			<button type="button" id="iy" onclick="">I/Y</button>
+			<button type="button" id="pv" onclick="">PV</button>	
+			<button type="button" id="pmt" onclick="">PMT</button>	
+			<button type="button" id="fv" onclick="">FV</button>	
+		</div>
+	</div>
+
+	<div class="a2">
+		
+		<div class="a3">
+			<div class="a5">
+				<div class="row">
+					<button type="button" id="percent" onclick="cal.enter_key(this)">%</button>
+					<button type="button" id="sqrt" onclick="cal.enter_key(this)">√x</button>
+					<button type="button" id="square" onclick="cal.enter_key(this)">x²</button>
+					<button type="button" id="reciprocal" onclick="cal.enter_key(this)">1/x</button>
+				</div>
+				<div class="row">
+					<button type="button" id="inv" onclick="cal.enter_key(this)">INV</button>
+					<button type="button" id="lbracket" onclick="cal.enter_key(this)">(</button>
+					<button type="button" id="rbracket" onclick="cal.enter_key(this)">)</button>
+					<button type="button" id="pow" onclick="cal.enter_key(this)">yx</button>
+				</div>
+			</div>
+
+			<div class="a6">
+				<div class="column">
+					<button type="button" id="ln" onclick="cal.enter_key(this)">ln</button>
+					<button type="button" id="sto" onclick="cal.enter_key(this)">STO</button>
+					<button type="button" id="rcl" onclick="cal.enter_key(this)">RCL</button>
+					<button type="button" id="clear" onclick="cal.enter_key(this)">CE|C</button>
+				</div>	
+			</div>
+
+			<div class="a7">
+				<div class="row">
+					<button type="button" id="7" onclick="cal.enter_key(this)">7</button>
+					<button type="button" id="8" onclick="cal.enter_key(this)">8</button>
+					<button type="button" id="9" onclick="cal.enter_key(this)">9</button>
+				</div>
+				<div class="row">
+					<button type="button" id="4" onclick="cal.enter_key(this)">4</button>
+					<button type="button" id="5" onclick="cal.enter_key(this)">5</button>
+					<button type="button" id="6" onclick="cal.enter_key(this)">6</button>
+				</div>
+				<div class="row">
+					<button type="button" id="1" onclick="cal.enter_key(this)">1</button>
+					<button type="button" id="2" onclick="cal.enter_key(this)">2</button>
+					<button type="button" id="3" onclick="cal.enter_key(this)">3</button>
+				</div>
+				<div class="row">
+					<button type="button" id="0" onclick="cal.enter_key(this)">0</button>
+					<button type="button" id="point" onclick="cal.enter_key(this)">·</button>
+					<button type="button" id="pm" onclick="cal.enter_key(this)">+|-</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="a4">
+			<div class="column">
+				<button type="button" id="/" onclick="cal.enter_key(this)">÷</button>
+				<button type="button" id="*" onclick="cal.enter_key(this)">×</button>
+				<button type="button" id="-" onclick="cal.enter_key(this)">-</button>
+				<button type="button" id="+" onclick="cal.enter_key(this)">+</button>
+				<button type="button" id="=" onclick="cal.enter_key(this)">=</button>
+			</div>	
+		</div>
+
+	</div>
+
+	<div>
+		<p id="test">test</p>
+		<p id="status">status</p>	
+		<p id="thekey">thekey</p>	
+	</div>
+
+
 </div>
 
-<p id="test"></p>
 
 </body>
 </html>
