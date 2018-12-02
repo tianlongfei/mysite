@@ -113,8 +113,8 @@ var key_type = {	// key: key_type
 	"square": "operator",
 	"reciprocal": "operator",
 	"inv": "func",
-	"lbracket": "operator",
-	"rbracket": "operator",
+	"lbracket": "unknown",
+	"rbracket": "unknown",
 	"pow": "operator",
 	"ln": "operator",
 	"sto": "unknown",
@@ -263,10 +263,8 @@ var cal = {
 	is_hyp: false,
 
 	// format.cal_mode = 'Chn'
-	level: 0,
-	level_len: 8,
-	op1: [null, null, null, null, null, null, null, null],
-	operator1: [null, null, null, null, null, null, null, null],
+	op1: null,
+	operator1: null,
 	op2: null,
 	operator2: null,
 	result: null,
@@ -276,13 +274,7 @@ var cal = {
 
 	// for debug only
 	show_status: function(){
-		return "current_value: " + this.current_value + 
-		"<br>op1: " + this.op1 + 
-		"<br>operator1: " + this.operator1 + 
-		"<br>op2: " + this.op2 + 
-		"<br>operator2: " + this.operator2 + 
-		"<br>result: " + this.result + 
-		"<br>level: " + this.level;
+		return "current_value: " + this.current_value + "op1: " + this.op1 + "operator1: " + this.operator1 + "result: " + this.result;
 	},
 
 
@@ -328,7 +320,7 @@ var cal = {
 		if (this.is_hyp && ["sin","cos","tan","asin","acos","atan"].indexOf(key) != -1) {
 			key = key + "h";
 		}
-		document.getElementById("thekey").innerHTML = "thekey: " + key;		// debug
+		document.getElementById("thekey").innerHTML = key;
 		return key;
 	},
 
@@ -339,7 +331,7 @@ var cal = {
 			if (key == "pm") {
 				this.current_value = this.result;
 			}
-			// this.result = null;			
+			this.result = null;			
 		}
 
 		len = this.current_value.length;
@@ -360,7 +352,7 @@ var cal = {
 					this.current_value += ".";
 			}
 			document.getElementById('screen').innerHTML = this.current_value;
-			document.getElementById('status').innerHTML = this.show_status();	// debug
+			document.getElementById('status').innerHTML = this.show_status();	// display
 			return 0;
 		}
 
@@ -368,7 +360,7 @@ var cal = {
 			if (["0","1","2","3","4","5","6","7","8","9"].indexOf(key) != -1) {
 				this.current_value = key;
 				document.getElementById('screen').innerHTML = this.current_value;
-				document.getElementById('status').innerHTML = this.show_status();	// debug
+				document.getElementById('status').innerHTML = this.show_status();	// display
 				return 0;
 			}
 		}
@@ -386,14 +378,14 @@ var cal = {
 				this.current_value = this.current_value.slice(1);
 			}
 			document.getElementById('screen').innerHTML = this.current_value;
-			document.getElementById('status').innerHTML = this.show_status();	// debug
+			document.getElementById('status').innerHTML = this.show_status();	// display
 			return 0;
 		}
 
 		if (key == "rand") {
 			this.current_value = Math.random().toFixed(this.max_len-1);			// 10位的随机数
 			document.getElementById('screen').innerHTML = this.current_value;
-			document.getElementById('status').innerHTML = this.show_status();	// debug
+			document.getElementById('status').innerHTML = this.show_status();	// display
 			return 0;
 		}
 
@@ -402,7 +394,7 @@ var cal = {
 		// document.getElementById('screen').innerHTML = parseFloat("-23.67855");
 
 		document.getElementById('test').innerHTML = len;
-		document.getElementById('status').innerHTML = this.show_status();	// debug
+		document.getElementById('status').innerHTML = this.show_status();	// display
 		// console.log(this.current_value);
 
 		return 0;
@@ -420,165 +412,212 @@ var cal = {
 
 	// Chn
 	enter_operator_chn: function(key){
-		if (operator_type[key] == 1) {
-			if (this.current_value != "") {
-				this.op2 = this.current_value;
-			} else if (this.result != null) {
-				this.op2 = this.result;
-			} else if (this.op1[this.level] != null) {
-				this.op2 = this.op1[this.level];
-			} else {
-				this.op2 = 0;
+		// 情况1，8
+		if (this.op1 == null && this.result == null) {
+			if (this.current_value == "") { 
+				this.current_value = "0";
 			}
-			this.operator2 = key;
-			this.current_value = "";
-			this.result = null;
 
-			this.calculate();
-			// display in this.calculate()
-			document.getElementById('status').innerHTML = this.show_status();	// debug
-			return 0;
-		}
-
-		if (operator_type[key] == 2) {
-			if (this.op1[this.level] == null) {
-				if (this.current_value != "") {
-					this.op1[this.level] = this.current_value;
-				} else if (this.result != null) {
-					this.op1[this.level] = this.result;
-				} else {
-					this.op1[this.level] = 0;
-				}
-				this.operator1[this.level] = key;
-				this.current_value = "";
-				this.result = null;
-				document.getElementById('screen').innerHTML = this.op1[this.level];	// display
-
-			} else {
-				if (this.current_value == "" && this.result == null) {
-					this.operator1[this.level] = key;
-					document.getElementById('screen').innerHTML = this.op1[this.level];	// display
-					document.getElementById('status').innerHTML = this.show_status();	// debug
-					return 0;
-				}
-
-				if (this.current_value != "") {
-					this.op2 = this.current_value;
-				} else if (this.result != null) {
-					this.op2 = this.result;
-				}
-
-				this.current_value = "";
-				this.result = null;
-
-				this.calculate();
-				// display in this.calculate()
-
-				this.op1[this.level] = this.result;
-				this.operator1[this.level] = key;
-
-				this.result = null;
-			}
-			document.getElementById('status').innerHTML = this.show_status();	// debug
-			return 0;
-		}
-
-		if (key == "lbracket") {
-			if (this.op1[this.level] != null) {
-				this.level = this.level + 1;
-			}
-			if (this.current_value != "") {
+			if (key == '=') {
 				this.result = this.current_value;
 				this.current_value = "";
-			} else if (this.result == null && this.level > 0) {
-				this.result = this.op1[this.level-1];
-			}
-			document.getElementById('screen').innerHTML = this.result;	// display
-			document.getElementById('status').innerHTML = this.show_status();	// debug
-			return 0;
-		}
-
-		if (key == "rbracket") {
-			this.get_result_one_level();
-			if (this.level > 0) {
-				this.level = this.level - 1;
-			}
-			document.getElementById('screen').innerHTML = this.result;	// display
-			document.getElementById('status').innerHTML = this.show_status();	// debug
-			return 0;
-		}
-
-		if (key == "=") {
-			while (this.level >= 0) {
-				this.get_result_one_level();
-				this.level = this.level - 1;				
-			}
-			this.level = 0;
-			document.getElementById('screen').innerHTML = this.result;	// display
-			document.getElementById('status').innerHTML = this.show_status();	// debug
-			return 0;
-		}
-
-
-
-	},
-
-	// Chn中计算部分的运算
-	get_result_one_level: function(){
-		if (this.op1[this.level] == null) {
-			if (this.current_value != "") {
-				this.result = this.current_value;
-				this.current_value = "";
-			} else if (this.result == null) {
-				this.result = 0;
-			}
-		} else {
-			if (this.current_value == "" && this.result == null) {
-				this.result = this.op1[this.level];
+				document.getElementById('screen').innerHTML = this.result;	// display
+				document.getElementById('status').innerHTML = this.show_status();	// display
 				return 0;
 			}
 
-			if (this.current_value != "") {
+			if (operator_type[key] == 2) {
+				this.op1 = this.current_value;
+				this.operator1 = key;
+				this.current_value = "";
+				document.getElementById('screen').innerHTML = this.op1;		// display
+			} else if (operator_type[key] == 1) {
 				this.op2 = this.current_value;
-			} else if (this.result != null) {
-				this.op2 = this.result;
+				this.current_value = "";
+				this.operator2 = key;
+				this.calculate();
+				document.getElementById('screen').innerHTML = this.result;	// display
+			} else {
+				document.getElementById('test').innerHTML = "未开发";
 			}
 
-			this.current_value = "";
-			this.result = null;
+			document.getElementById('status').innerHTML = this.show_status();	// debug
 
-			this.calculate();
-			// display in this.calculate()
+			return 0;
 		}
 
+		// 情况2，7
+		if (this.op1 == null && this.result != null) {
+			if (this.current_value == "") {
+				this.current_value = this.result;
+			}
 
-		return 0;
+			if (key == "=") {
+				this.result = this.current_value;
+				this.current_value = "";
+				document.getElementById('screen').innerHTML = this.result;	// display
+				document.getElementById('status').innerHTML = this.show_status();	// display
+				return 0;
+			}
+
+			if (operator_type[key] == 2) {
+				this.op1 = this.current_value;
+				this.operator1 = key;
+				this.current_value = "";
+				this.result = null;
+				document.getElementById('screen').innerHTML = this.op1;
+			} else if (operator_type[key] == 1) {
+				this.op2 = this.current_value;
+				this.operator2 = key;
+				this.current_value = "";
+				this.result = null;
+				this.calculate();
+				document.getElementById('screen').innerHTML = this.result;	// display
+
+			} else {
+				document.getElementById('test').innerHTML = "未开发";
+			}
+
+			document.getElementById('status').innerHTML = this.show_status();	// display
+			return 0;
+		}
+
+		// 情况3
+		if (this.op1 != null && this.result == null && this.current_value == "") {
+			if (key == "=") {
+				this.result = this.op1;
+				this.op1 = null;
+				this.operator1 = null;
+				document.getElementById('screen').innerHTML = this.result;	// display
+				document.getElementById('status').innerHTML = this.show_status();	// display
+				return 0;
+			}
+
+			if (operator_type[key] == 2) {
+				this.operator1 = key;
+				this.current_value = "";
+				this.result = null;
+				document.getElementById('screen').innerHTML = this.op1;
+			} else if (operator_type[key] == 1) {
+				this.op2 = this.op1;
+				this.operator2 = key;
+				this.current_value = "";	// redundant
+				this.result = null;			// redundant
+				this.calculate();
+				document.getElementById('screen').innerHTML = this.result;	// display
+			} else {
+				document.getElementById('test').innerHTML = "未开发";
+			}
+
+			document.getElementById('status').innerHTML = this.show_status();	// display
+			return 0;
+		}
+
+		// 情况4，6
+		if (this.op1 != null && this.result != null) {
+			if (this.current_value == "") {
+				this.current_value = this.result;
+			}
+
+			if (key == "=") {
+				this.op2 = this.current_value;
+				this.current_value = "";
+				this.result = null;
+				this.calculate();
+				document.getElementById('screen').innerHTML = this.result;			// display
+				document.getElementById('status').innerHTML = this.show_status();	// display
+				return 0;
+			}
+
+			if (operator_type[key] == 2) {
+				this.op2 = this.current_value;
+				this.current_value = "";
+				this.result = null;
+				this.calculate();
+
+				this.op1 = this.result;
+				this.operator1 = key;
+				this.result = null;
+				document.getElementById('screen').innerHTML = this.op1;
+			} else if (operator_type[key] == 1) {
+				this.op2 = this.current_value;
+				this.operator2 = key;
+				this.current_value = "";
+				this.result = null;		// this.calculate()前先设置为null，规范，实际不影响结果
+				this.calculate();
+				document.getElementById('screen').innerHTML = this.result;	// display
+			} else {
+				document.getElementById('test').innerHTML = "未开发";
+			}
+
+			document.getElementById('status').innerHTML = this.show_status();	// display
+			return 0;
+		}
+
+		// 情况5
+		if (this.op1 != null && this.result == null && this.current_value != "") {
+			if (key == "=") {
+				this.op2 = this.current_value;
+				this.current_value = "";
+				this.calculate();
+				document.getElementById('screen').innerHTML = this.result;	// display
+				document.getElementById('status').innerHTML = this.show_status();	// display
+				return 0;
+			}
+
+			if (operator_type[key] == 2) {
+				this.op2 = this.current_value;
+				this.current_value = "";
+				this.result = null;
+				this.calculate();
+				this.op1 = this.result;
+				this.operator1 = key;
+				this.result = null;
+				document.getElementById('screen').innerHTML = this.op1;	// display
+			} else if (operator_type[key] == 1) {
+				this.op2 = this.current_value;
+				this.operator2 = key;
+				this.current_value = "";
+				this.result = null;
+				this.calculate();
+				document.getElementById('screen').innerHTML = this.result;	// display
+			} else {
+				document.getElementById('test').innerHTML = "未开发";
+			}
+
+			document.getElementById('status').innerHTML = this.show_status();	// display
+			return 0;
+		}
 	},
 
+	// Chn中计算部分的运算
 	calculate: function(){
 		if (this.operator2 != null && this.op2 != null) {
 			this.result = this.cal_op(this.operator2);
+			// document.getElementById('screen').innerHTML = this.result;	// display
 			this.operator2 = null;
 			this.op2 = null;
-			document.getElementById('screen').innerHTML = this.result;	// display
-		} else if (this.operator1[this.level] != null && this.op1[this.level] != null && this.op2 != null) {
-			this.result = this.cal_op(this.operator1[this.level]);
-			this.op1[this.level] = null;
-			this.operator1[this.level] = null;
+		} else if (this.operator1 != null && this.op1 != null && this.op2 != null) {
+			this.result = this.cal_op(this.operator1);
+			// document.getElementById('screen').innerHTML = this.result;	// display
+			this.op1 = null;
+			this.operator1 = null;
 			this.op2 = null;
-			document.getElementById('screen').innerHTML = this.result;	// display
+		} else {
+			// this.result = "";
+			// document.getElementById('screen').innerHTML = this.op1;	// display
 		}
 	},
 
 	cal_op: function(operator){
 		if (operator == "+") {
-			return String(parseFloat(this.op1[this.level]) + parseFloat(this.op2));
+			return String(parseFloat(this.op1) + parseFloat(this.op2));
 		} else if (operator == "-") {
-			return String(parseFloat(this.op1[this.level]) - parseFloat(this.op2));
+			return String(parseFloat(this.op1) - parseFloat(this.op2));
 		} else if (operator == "*") {
-			return String(parseFloat(this.op1[this.level]) * parseFloat(this.op2));
+			return String(parseFloat(this.op1) * parseFloat(this.op2));
 		} else if (operator == "/") {
-			return String(parseFloat(this.op1[this.level]) / parseFloat(this.op2));
+			return String(parseFloat(this.op1) / parseFloat(this.op2));
 		} else if (operator == "sqrt") {
 			return String(Math.sqrt(parseFloat(this.op2)));
 		} else if (operator == "square") {
@@ -588,7 +627,7 @@ var cal = {
 		} else if (operator == "ln") {
 			return String(Math.log(parseFloat(this.op2)));
 		} else if (operator == "pow") {
-			return String(Math.pow(parseFloat(this.op1[this.level]), parseFloat(this.op2)));
+			return String(Math.pow(parseFloat(this.op1), parseFloat(this.op2)));
 		} else if (operator == "sin") {
 			return String(Math.sin(parseFloat(this.op2)));
 		} else if (operator == "cos") {
@@ -618,9 +657,9 @@ var cal = {
 		} else if (operator == "factorial") {
 			return String(this.factorial(parseFloat(this.op2)));
 		} else if (operator == "permutation") {
-			return String(this.permutation(parseFloat(this.op1[this.level]), parseFloat(this.op2)));
+			return String(this.permutation(parseFloat(this.op1), parseFloat(this.op2)));
 		} else if (operator == "combination") {
-			return String(this.combination(parseFloat(this.op1[this.level]), parseFloat(this.op2)));
+			return String(this.combination(parseFloat(this.op1), parseFloat(this.op2)));
 		} else if (operator == "round") {
 			return String(parseFloat(this.op2).toFixed(format.digital_num));
 		}
